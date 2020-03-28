@@ -1,2 +1,3 @@
-# yocto-docker-builder
-A docker image with softwares prepared for Yocto
+# docker-builder
+
+A docker image with softwares prepared for Yocto build.

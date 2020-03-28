@@ -227,7 +227,7 @@ class BaseConfig(object):
         cmd = "docker run --privileged=true --rm -h Ubuntu-Xenial -e DISPLAY=:0 -i %s \
             -v /etc/localtime:/etc/localtime \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
-            -v %s:/opt/yocto-build %s %s builder:yocto-build %s %s \"%s\" \"%s\"" \
+            -v %s:/opt/yocto-build %s builder:yocto-build %s %s \"%s\" \"%s\"" \
             % (psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")

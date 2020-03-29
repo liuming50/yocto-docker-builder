@@ -4,7 +4,7 @@ MAINTAINER Ming Liu <liu.ming50@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get upgrade -y --fix-missing
-RUN apt-get update && apt-get -y install locales python python3 sudo software-properties-common
+RUN apt-get update && apt-get -y install locales python python3 python3-distutils sudo software-properties-common binutils chrpath cpio cpp diffstat g++ gawk gcc git make patch libc-dev-bin wget
 RUN ["locale-gen", "en_US.UTF-8"]
 RUN ["dpkg-reconfigure", "locales"]
 

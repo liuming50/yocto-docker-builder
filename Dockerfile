@@ -4,7 +4,7 @@ MAINTAINER Ming Liu <liu.ming50@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get upgrade -y --fix-missing
-RUN apt-get update && apt-get -y install locales python python3 python3-distutils vim iputils-ping iproute2 iptables sudo software-properties-common binutils chrpath cpio cpp diffstat g++ gawk gcc git make patch libc-dev-bin wget
+RUN apt-get update && apt-get -y install locales python python3 python3-distutils vim openssh-client iputils-ping iproute2 iptables sudo software-properties-common binutils chrpath cpio cpp diffstat g++ gawk gcc git make patch libc-dev-bin wget
 RUN ["locale-gen", "en_US.UTF-8"]
 RUN ["dpkg-reconfigure", "locales"]
 

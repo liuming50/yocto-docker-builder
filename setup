@@ -108,8 +108,9 @@ class BaseConfig(object):
         """
 
         if self.uid == 0:
-            self.logger.error("setup script can not be run by 'root' user.")
-            exit(1)
+            self.uid = 1000
+        if self.gid == 0:
+            self.gid = 1000
 
         self.builddir = args.builddir
         self.command = args.command

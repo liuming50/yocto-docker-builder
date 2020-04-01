@@ -118,5 +118,5 @@ fi
 
 if shopt -q login_shell; then
   cd /opt/yocto-build
-  . sources/meta-sample/scripts/poky-init-build-env @@BUILD_DIR@@
+  . poky-init-build-env @@BUILD_DIR@@
 fi

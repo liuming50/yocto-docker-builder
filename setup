@@ -76,7 +76,7 @@ class BaseConfig(object):
 
     def __init__(self):
         self.uid = os.getuid()
-        self.gid = 27
+        self.gid = os.getgid()
 
         # Any change in the listed items will triger a rebuild
         self.checkfilelist = "home Dockerfile start.sh"

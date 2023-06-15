@@ -26,7 +26,7 @@ echo -e "\n# Builder privilege specification\nbuilder ALL=NOPASSWD: ALL" >> /etc
 
 [ -c "$(tty)" ] && chmod a+rw $(tty)
 
-cp -rp /opt/yocto-build/docker/home /
+cp -rp /opt/yocto/docker/home /
 chown -R builder: /home/builder
 
 # Set correct variables according to the passed parameters

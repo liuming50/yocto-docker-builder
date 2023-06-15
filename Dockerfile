@@ -1,10 +1,10 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 MAINTAINER Ming Liu <liu.ming50@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && apt-get upgrade -y --fix-missing
-RUN apt-get update && apt-get -y install locales python python3 python3-distutils vim openssh-client iputils-ping iproute2 iptables sudo software-properties-common binutils chrpath cpio cpp diffstat g++ gawk gcc git make patch libc-dev-bin wget texinfo
+RUN apt-get update && apt-get -y install ca-certificates chrpath cpio dbus-x11 devscripts diffstat gawk git git-lfs gnome-terminal iptables less libcanberra-gtk3-module liberror-perl locales lz4 lzop mc mg nano nfs-common pigz python-is-python3 python3 python3-pip sudo texinfo vim wget whiptail zstd
 RUN ["locale-gen", "en_US.UTF-8"]
 RUN ["dpkg-reconfigure", "locales"]
 

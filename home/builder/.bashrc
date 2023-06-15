@@ -13,7 +13,7 @@ shopt -s histappend
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
 HISTSIZE=1000
 HISTFILESIZE=2000
-HISTFILE=/opt/yocto-build/@@BUILD_DIR@@/.builder_bash_history
+HISTFILE=/opt/yocto/@@BUILD_DIR@@/.builder_bash_history
 
 # for getting aliases to expand in non-interactive shells
 shopt -s expand_aliases
@@ -117,6 +117,7 @@ if ! shopt -oq posix; then
 fi
 
 if shopt -q login_shell; then
-  cd /opt/yocto-build
-  . poky-init-build-env @@BUILD_DIR@@
+  cd /opt/yocto
+  script=$(ls *init-build-env)
+  . $script @@BUILD_DIR@@
 fi

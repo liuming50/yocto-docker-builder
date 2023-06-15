@@ -114,7 +114,7 @@ class BaseConfig(object):
 
         self.builddir = args.builddir
         self.command = args.command
-        self.downloads_opts = "-v %s:/opt/yocto-build/downloads" % args.downloads if args.downloads else ""
+        self.downloads_opts = "-v %s:/opt/yocto/downloads" % args.downloads if args.downloads else ""
 
     def change_cwd(self):
         """
@@ -156,7 +156,7 @@ class BaseConfig(object):
             exit(1)
 
         # Check docker version
-        dockerver = subprocess.check_output("%s --version" % dockerbin, shell = True)
+        dockerver = subprocess.check_output("%s --version" % dockerbin, shell = True).decode('utf-8')
         dockerver = re.match("^.*([0-9]+\.[0-9]+\.[0-9]+).*$", dockerver).group(1)
         if int(dockerver.split('.')[0]) < 1:
             self.logger.error("docker version must be higher than 1.0, current is %s" % dockerver)
@@ -173,7 +173,7 @@ class BaseConfig(object):
         rebuild = False
         nocache = "false"
         try:
-            output = subprocess.check_output("docker inspect --format={{.Created}} builder:yocto-build 2>/dev/null", shell = True)
+            output = subprocess.check_output("docker inspect --format={{.Created}} builder:yocto 2>/dev/null", shell = True).decode('utf-8')
             m = re.match(r'(^[0-9]{4}-[0-9]{2}-[0-9]{2})[a-zA-Z ]{1}([0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}).*$', output)
             created = time.mktime(time.strptime('%s %s' % (m.group(1), m.group(2)), '%Y-%m-%d %H:%M:%S.%f'))
 
@@ -211,7 +211,7 @@ class BaseConfig(object):
             rebuild = True
 
         if rebuild:
-            cmd = "cd docker; docker build --no-cache=%s -t builder:yocto-build ./" % nocache
+            cmd = "cd docker; docker build --no-cache=%s -t builder:yocto ./" % nocache
             self.logger.note("Building docker builder image... (This may take some time.)")
             subprocess.check_output(cmd, shell = True)
 
@@ -225,8 +225,8 @@ class BaseConfig(object):
             shutil.rmtree(conf)
 
         psedottyargs = "" if self.command else "-t"
-        cmd = "docker run --privileged=true --rm -h Ubuntu-Xenial -e DISPLAY=:0 -i %s \
-            -v %s:/opt/yocto-build %s builder:yocto-build %s %s \"%s\" \"%s\"" \
+        cmd = "docker run --privileged=true --rm -h Ubuntu-Focal -e DISPLAY=:0 -i %s \
+            -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
             % (psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")

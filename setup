@@ -225,7 +225,7 @@ class BaseConfig(object):
             shutil.rmtree(conf)
 
         psedottyargs = "" if self.command else "-t"
-        cmd = "docker run --privileged=true --rm -h Ubuntu-Focal -e DISPLAY=:0 -i %s \
+        cmd = "docker run --privileged=true --rm -h Ubuntu-Bionic -e DISPLAY=:0 -i %s \
             -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
             % (psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
 

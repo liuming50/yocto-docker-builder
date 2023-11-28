@@ -224,10 +224,11 @@ class BaseConfig(object):
         if args.cleanconf and os.path.exists(conf):
             shutil.rmtree(conf)
 
+        displayargs = os.getenv('DISPLAY')
         psedottyargs = "" if self.command else "-t"
-        cmd = "docker run --privileged=true --rm -h Ubuntu-Bionic -e DISPLAY=:0 -i %s \
-            -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
-            % (psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
+        cmd = "docker run --privileged=true --rm -h Ubuntu-Bionic -e DISPLAY=%s -i %s \
+            -v /tmp/.X11-unix/:/tmp/.X11-unix/ -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
+            % (displayargs, psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")
         return subprocess.call(cmd, shell = True)

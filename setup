@@ -227,7 +227,7 @@ class BaseConfig(object):
         displayargs = os.getenv('DISPLAY')
         psedottyargs = "" if self.command else "-t"
         cmd = "docker run --privileged=true --rm -h Ubuntu-Bionic -e DISPLAY=%s -i %s \
-            -v /tmp/.X11-unix/:/tmp/.X11-unix/ -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
+            -v /media:/media -v /dev:/dev -v /tmp/.X11-unix/:/tmp/.X11-unix/ -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
             % (displayargs, psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")

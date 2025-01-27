@@ -157,7 +157,7 @@ class BaseConfig(object):
 
         # Check docker version
         dockerver = subprocess.check_output("%s --version" % dockerbin, shell = True).decode('utf-8')
-        dockerver = re.match("^.*([0-9]+\.[0-9]+\.[0-9]+).*$", dockerver).group(1)
+        dockerver = re.match(r"^.*([0-9]+\.[0-9]+\.[0-9]+).*$", dockerver).group(1)
         if int(dockerver.split('.')[0]) < 1:
             self.logger.error("docker version must be higher than 1.0, current is %s" % dockerver)
             exit(1)

@@ -116,6 +116,12 @@ class BaseConfig(object):
         self.command = args.command
         self.downloads_opts = "-v %s:/opt/yocto/downloads" % args.downloads if args.downloads else ""
 
+        if os.path.exists("PROJECT.docker"):
+            with open('PROJECT.docker', 'r') as file:
+                self.dockername = file.read().rstrip()
+        else:
+            self.dockername = "builder:yocto"
+
     def change_cwd(self):
         """
         Ensure the current working directory is same with the
@@ -172,8 +178,9 @@ class BaseConfig(object):
 
         rebuild = False
         nocache = "false"
+
         try:
-            output = subprocess.check_output("docker inspect --format={{.Created}} builder:yocto 2>/dev/null", shell = True).decode('utf-8')
+            output = subprocess.check_output("docker inspect --format={{.Created}} %s 2>/dev/null" % self.dockername, shell = True).decode('utf-8')
             m = re.match(r'(^[0-9]{4}-[0-9]{2}-[0-9]{2})[a-zA-Z ]{1}([0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}).*$', output)
             created = time.mktime(time.strptime('%s %s' % (m.group(1), m.group(2)), '%Y-%m-%d %H:%M:%S.%f'))
 
@@ -211,8 +218,8 @@ class BaseConfig(object):
             rebuild = True
 
         if rebuild:
-            cmd = "cd docker; docker build --no-cache=%s -t builder:yocto ./" % nocache
-            self.logger.note("Building docker builder image... (This may take some time.)")
+            cmd = "cd docker; docker build --no-cache=%s -t %s ./" % (nocache, self.dockername)
+            self.logger.note("Building %s docker image... (This may take some time.)" % self.dockername)
             subprocess.check_output(cmd, shell = True)
 
     def start_image(self):
@@ -226,8 +233,8 @@ class BaseConfig(object):
 
         psedottyargs = "" if self.command else "-t"
         cmd = "docker run --privileged=true --rm -h Ubuntu-Focal -e DISPLAY=:0 -i %s \
-            -v %s:/opt/yocto %s builder:yocto %s %s \"%s\" \"%s\"" \
-            % (psedottyargs, os.getcwd(), self.downloads_opts, self.uid, self.gid, self.builddir, " ".join(self.command))
+            -v %s:/opt/yocto %s %s %s %s \"%s\" \"%s\"" \
+            % (psedottyargs, os.getcwd(), self.downloads_opts, self.dockername, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")
         return subprocess.call(cmd, shell = True)

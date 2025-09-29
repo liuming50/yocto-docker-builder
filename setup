@@ -233,8 +233,8 @@ class BaseConfig(object):
 
         psedottyargs = "" if self.command else "-t"
         cmd = "docker run --privileged=true --rm -h Ubuntu-Focal -e DISPLAY=:0 -i %s \
-            -v %s:/opt/yocto %s %s %s %s \"%s\" \"%s\"" \
-            % (psedottyargs, os.getcwd(), self.downloads_opts, self.dockername, self.uid, self.gid, self.builddir, " ".join(self.command))
+            -v %s/.docker:/home/builder/.docker:ro -v %s:/opt/yocto %s %s %s %s \"%s\" \"%s\"" \
+            % (psedottyargs, os.environ.get('HOME'), os.getcwd(), self.downloads_opts, self.dockername, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")
         return subprocess.call(cmd, shell = True)

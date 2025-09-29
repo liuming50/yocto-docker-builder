@@ -7,12 +7,12 @@ fi
 
 # create a group with a proper id, in case it doesn't exist
 if ! cat /etc/group | grep ":$2:" > /dev/null 2>&1 ; then
-    groupadd -g $2 builder
+    groupadd -g $2 builder 2>/dev/null
 fi
 
 # Add uid, gid for builder, in case it doesn't exist
 if ! cat /etc/passwd | grep ":$1:" > /dev/null 2>&1 ; then
-    useradd -m -u $1 -g $2 -s /bin/bash builder
+    useradd -m -u $1 -g $2 -s /bin/bash builder 2>/dev/null
 fi
 
 # Use bash as the default shell
@@ -27,7 +27,6 @@ echo -e "\n# Builder privilege specification\nbuilder ALL=NOPASSWD: ALL" >> /etc
 [ -c "$(tty)" ] && chmod a+rw $(tty)
 
 cp -rp /opt/yocto/docker/home /
-chown -R builder: /home/builder
 
 # Set correct variables according to the passed parameters
 sed -i "s#@@BUILD_DIR@@#$3#" /home/builder/.bashrc

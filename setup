@@ -76,7 +76,7 @@ class BaseConfig(object):
 
     def __init__(self):
         self.uid = os.getuid()
-        self.gid = os.getgid()
+        self.gid = os.getuid()
 
         # Any change in the listed items will triger a rebuild
         self.checkfilelist = "home Dockerfile start.sh"
@@ -232,8 +232,8 @@ class BaseConfig(object):
             shutil.rmtree(conf)
 
         psedottyargs = "" if self.command else "-t"
-        cmd = "docker run --privileged=true --rm -h Ubuntu-Focal -e DISPLAY=:0 -i %s \
-            -v %s/.docker:/home/builder/.docker:ro -v %s:/opt/yocto %s %s %s %s \"%s\" \"%s\"" \
+        cmd = "docker run --privileged=true --rm -h Ubuntu-Noble -e DISPLAY=:0 -i %s \
+            -v %s/.docker:/home/ubuntu/.docker:ro -v %s:/opt/yocto %s %s %s %s \"%s\" \"%s\"" \
             % (psedottyargs, os.environ.get('HOME'), os.getcwd(), self.downloads_opts, self.dockername, self.uid, self.gid, self.builddir, " ".join(self.command))
 
         self.logger.note("Running build machine...")

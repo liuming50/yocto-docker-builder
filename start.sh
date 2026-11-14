@@ -6,12 +6,12 @@ if [ "$3" == "" ] ; then
 fi
 
 # create a group with a proper id, in case it doesn't exist
-if ! cat /etc/group | grep ":$2:" > /dev/null 2>&1 ; then
+if ! cat /etc/group | grep -q ":$2:" > /dev/null 2>&1 ; then
     groupadd -g $2 builder 2>/dev/null
 fi
 
 # Add uid, gid for builder, in case it doesn't exist
-if ! cat /etc/passwd | grep ":$1:" > /dev/null 2>&1 ; then
+if ! cat /etc/passwd | grep -q ":$1:" > /dev/null 2>&1 ; then
     useradd -m -u $1 -g $2 -s /bin/bash builder 2>/dev/null
 fi
 
